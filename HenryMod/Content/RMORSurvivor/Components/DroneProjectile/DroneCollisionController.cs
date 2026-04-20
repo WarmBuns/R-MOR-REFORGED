@@ -7,7 +7,13 @@ namespace RMORMod.Content.RMORSurvivor.Components.DroneProjectile
 {
     public class DroneCollisionController : MonoBehaviour
     {
+        public static float destroyIfNoTargetTime = 5f;
+
         private ProjectileTargetComponent ptc;
+        private ProjectileStickOnImpact stick;
+        private ProjectileController projectileController;
+        private ProjectileSimple projectileSimple;
+        private float projectileNoTargetStopwatch;
         private int passThroughWallsFrames = 0;
 
         private void Awake()
@@ -16,6 +22,7 @@ namespace RMORMod.Content.RMORSurvivor.Components.DroneProjectile
             ptc = base.GetComponent<ProjectileTargetComponent>();
             projectileNoTargetStopwatch = 0f;
             projectileController = base.GetComponent<ProjectileController>();
+            base.TryGetComponent(out projectileSimple);
         }
 
         private void FixedUpdate()
@@ -48,11 +55,10 @@ namespace RMORMod.Content.RMORSurvivor.Components.DroneProjectile
             }
             else
             {
-                if (NetworkServer.active)
+                if (NetworkServer.active && projectileSimple)
                 {
                     //Reset lifetime.
-                    ProjectileSimple ps = base.GetComponent<ProjectileSimple>();
-                    ps.SetLifetime(30f);
+                    projectileSimple.SetLifetime(30f);
                 }
                 passThroughWallsFrames = 0;
                 base.gameObject.layer = LayerIndex.projectile.intVal;
@@ -76,10 +82,5 @@ namespace RMORMod.Content.RMORSurvivor.Components.DroneProjectile
                 base.gameObject.layer = LayerIndex.projectile.intVal;
             }
         }
-
-        public static float destroyIfNoTargetTime = 5f;
-        private float projectileNoTargetStopwatch;
-        private ProjectileStickOnImpact stick;
-        private ProjectileController projectileController;
     }
 }

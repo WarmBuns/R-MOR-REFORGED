@@ -26,7 +26,7 @@ namespace EntityStates.RMOR.Primary
 
         public override void OnEnter()
         {
-            OverclockController ovc = base.GetComponent<OverclockController>();
+            base.TryGetComponent(out OverclockController ovc);
             bool hasOVC = ovc && ovc.BuffActive();
             base.projectilePrefab = hasOVC ? overclockPrefab : projectilePrefab; //shoots faster projectile in overclock
             base.effectPrefab = effectPrefab;

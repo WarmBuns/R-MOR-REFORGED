@@ -4,6 +4,7 @@ using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace EntityStates.RMOR.Utility
 {
@@ -12,7 +13,8 @@ namespace EntityStates.RMOR.Utility
         public static Texture2D texGaugeFortify;
         public static Texture2D texGaugeArrowFortify;
         public static new Material overlayMaterial;
-        float barrierTimer = 0f;
+        private float barrierTimer = 0f;
+        private const float barrierTickInterval = 0.1f;
 
         public override void LoadStats()
         {
@@ -29,10 +31,12 @@ namespace EntityStates.RMOR.Utility
 
         public override void FixedUpdate()
         {
-            barrierTimer++;
-            if (barrierTimer % 5 == 0)
+            barrierTimer += Time.fixedDeltaTime;
+            if (barrierTimer >= barrierTickInterval)
             {
-                base.healthComponent.AddBarrier(1f);
+                barrierTimer -= barrierTickInterval;
+                if (NetworkServer.active)
+                    base.healthComponent.AddBarrier(1f);
             }
             base.FixedUpdate();
         }

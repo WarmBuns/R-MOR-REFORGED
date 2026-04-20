@@ -17,7 +17,8 @@ namespace RMORMod.Content.Shared.Components.Body
 
         public void Start()
         {
-            characterBody.skillLocator.secondary.RemoveAllStocks();
+            if (NetworkServer.active)
+                characterBody.skillLocator.secondary.RemoveAllStocks();
             if (characterBody.master)
             {
                 dronePersist = characterBody.master.gameObject.GetComponent<DroneStockPersist>();

@@ -8,9 +8,25 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
 {
     public class DroneFollowerController : NetworkBehaviour
     {
-        private float sleepTimer = 1.5f;    //Don't render drones until 1.5s after spawn.
+        public static GameObject activateEffect = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLoader");
+        public static GameObject deactivateEffect = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLoader");
+        public static GameObject dronePrefab;
+        public static float droneScale = 1f;
+        public static int maxFollowingDrones = 10;
+        public static float orbitDuration = 6f;
 
         private static bool initialized = false;
+
+        private CharacterBody characterBody;
+        private int droneCount;
+        private Vector3 velocity = Vector3.zero;
+        private float stopwatch;
+        private float sleepTimer = 1.5f;    //Don't render drones until 1.5s after spawn.
+        private DroneFollower[] droneFollowers;
+
+        [SyncVar]
+        private int _droneCountServer;
+
         public static void Initialize()
         {
             if (initialized) return;
@@ -32,17 +48,30 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
 
         private void ApplyDroneSkins()
         {
-            CharacterModel characterModel = null;
-            if (characterBody && characterBody.modelLocator && characterBody.modelLocator.modelTransform)
+            if (!characterBody || !characterBody.modelLocator || !characterBody.modelLocator.modelTransform)
+                return;
+
+            if (!characterBody.modelLocator.modelTransform.TryGetComponent(out CharacterModel characterModel))
             {
-                characterModel = characterBody.modelLocator.modelTransform.GetComponent<CharacterModel>();
+                Log.Warning("DroneFollowerController: Could not find CharacterModel on model transform.");
+                return;
             }
 
             for (int i = 0; i < droneFollowers.Length; i++)
             {
-                ChildLocator droneChildLocator = droneFollowers[i].gameObject.GetComponent<ChildLocator>();
+                if (!droneFollowers[i].gameObject.TryGetComponent(out ChildLocator droneChildLocator))
+                {
+                    Log.Warning("DroneFollowerController: Drone follower is missing a ChildLocator.");
+                    continue;
+                }
 
                 SkinnedMeshRenderer droneRenderer = droneChildLocator.FindChildComponent<SkinnedMeshRenderer>("Drone");
+                if (!droneRenderer)
+                {
+                    Log.Warning("DroneFollowerController: Could not find Drone SkinnedMeshRenderer on follower.");
+                    continue;
+                }
+
                 droneRenderer.sharedMaterial = characterModel.baseRendererInfos[2].defaultMaterial;
                 droneRenderer.sharedMesh = (characterModel.baseRendererInfos[2].renderer as SkinnedMeshRenderer).sharedMesh;
             }
@@ -216,24 +245,6 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
         {
             _droneCountServer = newCount;
         }
-
-        public static GameObject activateEffect = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLoader");
-        public static GameObject deactivateEffect = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLoader");
-        public static GameObject dronePrefab;
-        private CharacterBody characterBody;
-        private int droneCount;
-        public static float droneScale = 1f;
-        public static int maxFollowingDrones = 10;
-
-        private Vector3 velocity = Vector3.zero;
-
-        private float stopwatch;
-        public static float orbitDuration = 6f;
-
-        DroneFollower[] droneFollowers;
-
-        [SyncVar]
-        private int _droneCountServer;
 
         public struct DroneFollower
         {

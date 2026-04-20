@@ -128,14 +128,12 @@ namespace EntityStates.RMOR.Special
                 hitEnemy = true;
                 if (base.characterBody)
                 {
-                    OverclockController hc = base.gameObject.GetComponent<OverclockController>();
-                    if (hc)
+                    if (base.gameObject.TryGetComponent(out OverclockController hc))
                     {
                         hc.ExtendOverclock(Mathf.Lerp(0.8f, 2f, chargePercent));
                     }
 
-                    DroneStockController dsc = base.GetComponent<DroneStockController>();
-                    if (dsc)
+                    if (base.TryGetComponent(out DroneStockController dsc))
                     {
                         dsc.MeleeHit();
                     }

@@ -44,7 +44,8 @@ namespace EntityStates.RMOR.Emotes
 
             characterBody.hideCrosshair = true;
 
-            if (GetAimAnimator()) GetAimAnimator().enabled = false;
+            AimAnimator aimAnimator = GetAimAnimator();
+            if (aimAnimator) aimAnimator.enabled = false;
             animator.SetLayerWeight(animator.GetLayerIndex("AimPitch"), 0);
             animator.SetLayerWeight(animator.GetLayerIndex("AimYaw"), 0);
 
@@ -85,7 +86,8 @@ namespace EntityStates.RMOR.Emotes
 
             characterBody.hideCrosshair = false;
 
-            if (GetAimAnimator()) GetAimAnimator().enabled = true;
+            AimAnimator aimAnimator = GetAimAnimator();
+            if (aimAnimator) aimAnimator.enabled = true;
             animator.SetLayerWeight(animator.GetLayerIndex("AimPitch"), 1);
             animator.SetLayerWeight(animator.GetLayerIndex("AimYaw"), 1);
 

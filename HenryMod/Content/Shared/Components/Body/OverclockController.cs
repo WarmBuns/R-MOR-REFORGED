@@ -7,6 +7,23 @@ namespace RMORMod.Content.Shared.Components.Body
 {
     public class OverclockController : MonoBehaviour
     {
+        public static SkillDef ovcDef;
+        public static float gaugeScale = 0.3f;
+
+        public float buffPercent = 0f;
+        public Texture2D texGauge;
+        public Texture2D texGaugeArrow;
+        public bool menuActive = false;
+
+        private bool buffActive = false;
+        private float extensionTime = 0f;
+        private NetworkIdentity networkIdentity;
+        private Rect rectGauge;
+        private Rect rectGaugeArrow;
+        private float gaugeLeftBound;
+        private float gaugeRightBound;
+        private float gaugeArroyYPos;
+
         public bool BuffActive()
         {
             return buffActive;
@@ -78,23 +95,5 @@ namespace RMORMod.Content.Shared.Components.Body
             }
         }
         #endregion
-
-        public float buffPercent = 0f;
-        private bool buffActive = false;
-        private float extensionTime = 0f;
-
-        public static SkillDef ovcDef;
-
-        private NetworkIdentity networkIdentity;
-        public Texture2D texGauge;
-        public Texture2D texGaugeArrow;
-        private Rect rectGauge;
-        private Rect rectGaugeArrow;
-        public static float gaugeScale = 0.3f;
-        private float gaugeLeftBound;
-        private float gaugeRightBound;
-        private float gaugeArroyYPos;
-
-        public bool menuActive = false;
     }
 }

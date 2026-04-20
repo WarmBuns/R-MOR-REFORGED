@@ -7,6 +7,19 @@ namespace EntityStates.RMOR.Special
 {
     public class ChargeSlam : BaseState
     {
+        public static float baseMinDuration = 0.5f;
+        public static float baseChargeDuration = 1.5f;
+        public static GameObject chargeEffectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLoader");
+        public static GameObject holdChargeVfxPrefab = EntityStates.Toolbot.ChargeSpear.holdChargeVfxPrefab;
+
+        private float minDuration;
+        private float chargeDuration;
+        private float charge;
+        public float chargePercent;
+        private Animator modelAnimator;
+        private bool startedChargeAnim = false;
+        private GameObject holdChargeVfxGameObject = null;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -104,18 +117,5 @@ namespace EntityStates.RMOR.Special
         {
             return InterruptPriority.PrioritySkill;
         }
-
-        public static float baseMinDuration = 0.5f;
-        public static float baseChargeDuration = 1.5f;
-        private float minDuration;
-        private float chargeDuration;
-        private float charge;
-        public float chargePercent;
-        private Animator modelAnimator;
-        public static GameObject chargeEffectPrefab = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniImpactVFXLoader");
-        private bool startedChargeAnim = false;
-
-        public static GameObject holdChargeVfxPrefab = EntityStates.Toolbot.ChargeSpear.holdChargeVfxPrefab;
-        private GameObject holdChargeVfxGameObject = null;
     }
 }

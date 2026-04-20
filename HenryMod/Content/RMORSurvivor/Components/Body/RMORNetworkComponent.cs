@@ -19,10 +19,7 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
         [Server]
         public void ResetSpecialStock()
         {
-            if (NetworkServer.active)
-            {
-                RpcResetSpecialStock();
-            }
+            RpcResetSpecialStock();
         }
 
         [ClientRpc]
@@ -34,7 +31,6 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
         [Server]
         public void ExtendOverclockServer(float duration)
         {
-            if (!NetworkServer.active) return;
             RpcExtendOverclock(duration);
         }
 
@@ -50,20 +46,12 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
         [Server]
         public void AddSecondaryStockServer()
         {
-            if (!NetworkServer.active) return;
-            RpcAddSecondaryStock();
-        }
-
-        [ClientRpc]
-        public void RpcAddSecondaryStock()
-        {
-            if (hasAuthority && characterBody.skillLocator.secondary.stock < characterBody.skillLocator.secondary.maxStock && (characterBody.skillLocator.secondary.skillDef == Skilldefs.SpecialMissile))
+            GenericSkill secondary = characterBody.skillLocator.secondary;
+            if (secondary.stock < secondary.maxStock && secondary.skillDef == Skilldefs.SpecialMissile)
             {
-                characterBody.skillLocator.secondary.stock++;
-                if (characterBody.skillLocator.secondary.stock == characterBody.skillLocator.secondary.maxStock)
-                {
-                    characterBody.skillLocator.secondary.rechargeStopwatch = 0f;
-                }
+                secondary.stock++;
+                if (secondary.stock == secondary.maxStock)
+                    secondary.rechargeStopwatch = 0f;
             }
         }
 

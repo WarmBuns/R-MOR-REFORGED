@@ -11,7 +11,38 @@ namespace EntityStates.RMOR.Utility
 {
 	public class BeginOverclock : BaseState
 	{
-		public override void OnEnter()
+        public static event Action<BeginOverclock> onAuthorityFixedUpdateGlobal;  //Used for achievement.
+
+        public static GameObject jetEffectPrefab;
+        public static float baseExitDuration = 0.3f;
+        public static float shortHopVelocity = 12f;
+        public static float jetFireFrequency = 6f;
+        public static Material overlayMaterial;
+        public static Texture2D texGauge, texGaugeArrow;
+
+        public float buffDuration = 4f;
+        public BuffDef buffDef;
+        public string startSoundString = "Play_MULT_shift_start";
+        public string endSoundString = "Play_MULT_shift_end";
+        public SkillDef cancelDef;
+        public float stopwatch = 0f;
+        public Material internalOverlayMaterial;
+        public OverclockController overclockController;
+        public Texture2D gaugeInternal, gaugeArrowInternal;
+
+        private Animator modelAnimator;
+        private float jetFireTime;
+        private float jetStopwatch;
+        private float timerSinceComplete = 0f;
+        private bool beginExit;
+        private int startStocks = 0;
+        private Transform leftJet;
+        private Transform rightJet;
+        private TemporaryOverlay tempOverlay;
+        private CharacterModel characterModel;
+        private GenericSkill skillSlot;
+
+        public override void OnEnter()
 		{
 			base.OnEnter();
 
@@ -189,42 +220,6 @@ namespace EntityStates.RMOR.Utility
 		{
 			return InterruptPriority.Skill;
         }
-
-        //Used for achievement.
-        public static event Action<BeginOverclock> onAuthorityFixedUpdateGlobal;
-
-        public float buffDuration = 4f;
-		public BuffDef buffDef;
-		public string startSoundString = "Play_MULT_shift_start";
-		public string endSoundString = "Play_MULT_shift_end";
-		public SkillDef cancelDef;
-
-        private Animator modelAnimator;
-		public float stopwatch = 0f;
-		private float jetFireTime;
-		private float jetStopwatch;
-		private float timerSinceComplete = 0f;
-		private bool beginExit;
-		private int startStocks = 0;
-		private Transform leftJet;
-		private Transform rightJet;
-		private TemporaryOverlay tempOverlay;
-		private CharacterModel characterModel;
-
-		public static GameObject jetEffectPrefab;
-		public static float baseExitDuration = 0.3f;
-		public static float shortHopVelocity = 12f;
-		public static float jetFireFrequency = 6f;
-
-		public Material internalOverlayMaterial;
-		public static Material overlayMaterial;
-
-		public OverclockController overclockController;
-		private GenericSkill skillSlot;
-
-		public Texture2D gaugeInternal, gaugeArrowInternal;
-
-		public static Texture2D texGauge, texGaugeArrow;
 	}
 
 	public class CancelOverclock : BaseState

@@ -9,6 +9,29 @@ namespace RMORMod.Content.RMORSurvivor.Components.DroneProjectile
 {
     public class DroneDamageController : MonoBehaviour
     {
+        public static float procCoefficient = 0.5f;
+        public static float baseDurationBetweenTicks = 0.5f;
+        public static int baseTickCount = 8;
+        public static float damageHealFraction = 0.4f;
+        public static GameObject hitEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/OmniImpactVFXSlashSyringe.prefab").WaitForCompletion();
+        public static NetworkSoundEventDef startSound;
+        public static NetworkSoundEventDef hitSound;
+
+        private float durationBetweenTicks;
+        private float stopwatch;
+        private ProjectileStickOnImpact stick;
+        private int damageTicks;
+        private int tickCount;
+        private bool firstHit;
+        private int dronePartsCount = 0;
+        private int coolantCount = 0;
+        private CharacterMaster master;
+        private GameObject owner;
+        private TeamIndex teamIndex;
+        private ProjectileController projectileController;
+        private ProjectileDamage projectileDamage;
+        private HealthComponent ownerHealthComponent;
+        private HealthComponent victimHealthComponent;
 
         public void Awake()
         {
@@ -33,8 +56,14 @@ namespace RMORMod.Content.RMORSurvivor.Components.DroneProjectile
                 if (owner)
                 {
                     ownerHealthComponent = projectileController.owner.GetComponent<HealthComponent>();
-                    TeamComponent tc = owner.GetComponent<TeamComponent>();
-                    teamIndex = tc.teamIndex;
+                    if (!owner.TryGetComponent(out TeamComponent tc))
+                    {
+                        Log.Warning("DroneDamageController: Owner is missing a TeamComponent.");
+                    }
+                    else
+                    {
+                        teamIndex = tc.teamIndex;
+                    }
                     CharacterBody cb = owner.GetComponent<CharacterBody>();
                     if (cb && cb.inventory)
                     {
@@ -221,31 +250,5 @@ namespace RMORMod.Content.RMORSurvivor.Components.DroneProjectile
             }
         }
 
-        public static float procCoefficient = 0.5f;
-        public static float baseDurationBetweenTicks = 0.5f;
-        public static int baseTickCount = 8;
-        public static float damageHealFraction = 0.4f;
-        public static GameObject hitEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Treebot/OmniImpactVFXSlashSyringe.prefab").WaitForCompletion();
-        public static NetworkSoundEventDef startSound;
-        public static NetworkSoundEventDef hitSound;
-
-        private float durationBetweenTicks;
-        private float stopwatch;
-        private ProjectileStickOnImpact stick;
-        private int damageTicks;
-        private int tickCount;
-
-        private bool firstHit;
-
-        private int dronePartsCount = 0;
-        private int coolantCount = 0;
-
-        private CharacterMaster master;
-        private GameObject owner;
-        private TeamIndex teamIndex;
-        private ProjectileController projectileController;
-        private ProjectileDamage projectileDamage;
-        private HealthComponent ownerHealthComponent;
-        private HealthComponent victimHealthComponent;
     }
 }

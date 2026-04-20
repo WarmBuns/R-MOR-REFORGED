@@ -9,6 +9,21 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
 {
     public class RMORTargetingController : MonoBehaviour
     {
+        public static GameObject enemyIndicatorPrefab;
+        public static GameObject allyIndicatorPrefab;
+
+        public float maxTrackingDistance = 160f;
+        public float maxTrackingAngle = 60f;
+        public float trackerUpdateFrequency = 10f;
+
+        private HurtBox trackingTarget;
+        private CharacterBody characterBody;
+        private TeamComponent teamComponent;
+        private InputBankTest inputBank;
+        private float trackerUpdateStopwatch;
+        private Indicator enemyIndicator;
+        private readonly BullseyeSearch search = new BullseyeSearch();
+
         public void Awake()
         {
             this.enemyIndicator = new Indicator(base.gameObject, enemyIndicatorPrefab);
@@ -76,21 +91,5 @@ namespace RMORMod.Content.RMORSurvivor.Components.Body
         {
             return this.trackingTarget != null;
         }
-
-        public static GameObject enemyIndicatorPrefab;
-        public static GameObject allyIndicatorPrefab;
-
-        public float maxTrackingDistance = 160f;
-        public float maxTrackingAngle = 60f;
-        public float trackerUpdateFrequency = 10f;
-
-        private HurtBox trackingTarget;
-
-        private CharacterBody characterBody;
-        private TeamComponent teamComponent;
-        private InputBankTest inputBank;
-        private float trackerUpdateStopwatch;
-        private Indicator enemyIndicator;
-        private readonly BullseyeSearch search = new BullseyeSearch();
     }
 }

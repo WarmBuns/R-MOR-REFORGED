@@ -8,6 +8,19 @@ namespace EntityStates.RMOR.Secondary
 {
     public class FireSeekingDrone : BaseState
     {
+        public static float damageCoefficient = 2.5f;
+        public static GameObject projectilePrefab;
+        public static string muzzleString;
+        public static GameObject muzzleflashEffectPrefab;
+        public static float baseDuration = 0.25f;
+        public static float force = 250f;
+
+        private bool hasFired;
+        private float duration;
+        protected bool isCrit;
+        private HurtBox initialOrbTarget = null;
+        private RMORTargetingController targetingController;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -82,20 +95,5 @@ namespace EntityStates.RMOR.Secondary
         {
             return InterruptPriority.Skill;
         }
-
-        private bool hasFired;
-
-
-        public static float damageCoefficient = 2.5f;
-        public static GameObject projectilePrefab;
-        public static string muzzleString;
-        public static GameObject muzzleflashEffectPrefab;
-        public static float baseDuration = 0.25f;
-        public static float force = 250f;
-
-        private float duration;
-        protected bool isCrit;
-        private HurtBox initialOrbTarget = null;
-        private RMORTargetingController targetingController;
     }
 }

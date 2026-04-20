@@ -12,17 +12,15 @@ namespace EntityStates.RMOR.Special
         public static GameObject partialChargeEffect;
         public static GameObject fullChargeEffect;
         public static int maxChargeLevel = 3;
+        public static float baseChargeDuration = 1.8f;
+        public static GameObject holdChargeVfxPrefab = EntityStates.Toolbot.ChargeSpear.holdChargeVfxPrefab;
 
         private float duration;
         public int chargeLevel;
-
-        public static float baseChargeDuration = 1.8f;
         private float minDuration;
         private float charge;
         public float chargePercent;
         private Animator modelAnimator;
-
-        public static GameObject holdChargeVfxPrefab = EntityStates.Toolbot.ChargeSpear.holdChargeVfxPrefab;
         private GameObject holdChargeVfxGameObject = null;
 
         public override void OnEnter()
@@ -68,7 +66,7 @@ namespace EntityStates.RMOR.Special
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            base.characterBody.SetAimTimer(3f);
+            if (base.characterBody) base.characterBody.SetAimTimer(3f);
 
             charge += Time.deltaTime * this.attackSpeedStat;
 
