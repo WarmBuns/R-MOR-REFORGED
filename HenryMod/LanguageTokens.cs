@@ -3,13 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Zio.FileSystems;
 
 namespace RMORMod
 {
     internal class LanguageTokens
     {
-        public static SubFileSystem fileSystem;
         internal static string languageRoot => System.IO.Path.Combine(LanguageTokens.assemblyDir, "language");
 
         internal static string assemblyDir

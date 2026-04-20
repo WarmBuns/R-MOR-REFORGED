@@ -13,7 +13,7 @@ namespace RMORMod.Modules.Survivors
         public abstract string survivorTokenPrefix { get; }
         public abstract string cachedName { get; }
 
-        public abstract UnlockableDef characterUnlockableDef { get; }
+        public virtual UnlockableDef characterUnlockableDef => null;
 
         public virtual ConfigEntry<bool> characterEnabledConfig { get; }
 

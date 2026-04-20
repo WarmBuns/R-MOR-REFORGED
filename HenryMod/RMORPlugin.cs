@@ -26,7 +26,6 @@ namespace RMORMod
     {
         "PrefabAPI",
         "SoundAPI",
-        "UnlockableAPI",
         "RecalculateStatsAPI",
         "DamageAPI"
     })]
